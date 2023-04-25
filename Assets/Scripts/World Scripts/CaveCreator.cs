@@ -15,6 +15,10 @@ public class CaveCreator : MonoBehaviour {
 
     private int roomNo = 0;
 
+    public Room _currentRoom {
+        get { return currentRoom;}
+    }
+
     private int[] GetRoomSize() {
         Size roomSize = (Size)UnityEngine.Random.Range(0, (int)maxRoomSize + 1);
 
@@ -149,9 +153,10 @@ public class CaveCreator : MonoBehaviour {
         foreach(Object tile in tiles) {
             hexItem.Add(tile.name, tile);
         }
+        Test();
     }
 
-    private void Start() {
+    private void Test() {
         currentRoom = CreateDungeon(null, 0);
         MakeRoom(currentRoom);
         currentRoom.MakeStatic();
@@ -182,7 +187,6 @@ public class CaveCreator : MonoBehaviour {
     }
 }
 
-// WFC ALGO
 public class Wave {
     public List<Object> hexes;
     public Dictionary<Object, int> probablity;
@@ -206,7 +210,6 @@ public class Wave {
     }
 }
 
-[Serializable]
 public class Room {
     public int roomNo;
     [HideInInspector] public bool isExist;

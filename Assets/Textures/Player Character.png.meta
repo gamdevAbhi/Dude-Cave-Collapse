@@ -226,9 +226,9 @@ TextureImporter:
       name: Face
       rect:
         serializedVersion: 2
-        x: 186
+        x: 51
         y: 174
-        width: 111
+        width: 245
         height: 94
       alignment: 0
       pivot: {x: 0.5, y: 0.5}
