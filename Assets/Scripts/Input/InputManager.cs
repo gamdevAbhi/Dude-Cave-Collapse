@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 
 public class InputManager : MonoBehaviour {
+    [Header("Inputs")]
     [SerializeField] private List<KeyInput> inputList;
     public Dictionary<string, KeyInput> inputs;
 

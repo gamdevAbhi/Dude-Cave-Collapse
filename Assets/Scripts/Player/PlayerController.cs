@@ -2,11 +2,13 @@ using System;
 using UnityEngine;
 
 public class PlayerController : MonoBehaviour {
-    [SerializeField] private float speed;
+    [Header("Reference")]
     [SerializeField] private Transform handPivot;
-    [SerializeField] private CaveCreator caveCreator;
+    [SerializeField] private CaveManager caveManager;
     [SerializeField] private InputManager inputManager;
     [SerializeField] private CameraController cameraController;
+    [Header("Player Properties")]
+    [SerializeField] private float speed;
     
     private float minDistance = 0.25f;
     private Vector3 normalScale;
@@ -25,14 +27,14 @@ public class PlayerController : MonoBehaviour {
         if(pos.x < 0) pos.x = 0;
         if(pos.y < 0) pos.y = 0;
 
-        if(currentRoom.grid[(int)pos.x, (int)pos.y].hex
-        != caveCreator.hexItem["Water"]) {
+        if(currentRoom.grid[(int)pos.x, (int)pos.y].tile.env
+        != Object.Enviroment.Water) {
             targetTile = currentRoom.grid[(int)pos.x, (int)pos.y].transform;
         }
     }
 
     private void FixPos() { // not need just for testing
-        Room currentRoom = caveCreator._currentRoom;
+        Room currentRoom = caveManager._currentRoom;
 
         Vector2 currentPos = new Vector2(Mathf.Round(transform.position.x), Mathf.Round(transform.position.z));
         currentPos = new Vector2(Mathf.Min(currentRoom.grid.GetLength(0) - 1, currentPos.x), 
@@ -56,7 +58,7 @@ public class PlayerController : MonoBehaviour {
     }
 
     private void MoveUp() {
-        Room currentRoom = caveCreator._currentRoom;
+        Room currentRoom = caveManager._currentRoom;
         Tuple<Vector2, Vector3> vectors = GetDistance();
         Vector2 pos = vectors.Item1 + cameraController.cameraDirection.upVector;
 
@@ -64,7 +66,7 @@ public class PlayerController : MonoBehaviour {
     }
 
     private void MoveDown() {
-        Room currentRoom = caveCreator._currentRoom;
+        Room currentRoom = caveManager._currentRoom;
         Tuple<Vector2, Vector3> vectors = GetDistance();
         Vector2 pos = vectors.Item1 - cameraController.cameraDirection.upVector;
 
@@ -72,7 +74,7 @@ public class PlayerController : MonoBehaviour {
     }
 
     private void MoveForward() {
-        Room currentRoom = caveCreator._currentRoom;
+        Room currentRoom = caveManager._currentRoom;
         Tuple<Vector2, Vector3> vectors = GetDistance();
         Vector2 pos = vectors.Item1 + cameraController.cameraDirection.leftVector;
 
@@ -80,7 +82,7 @@ public class PlayerController : MonoBehaviour {
     }
 
     private void MoveBackward() {
-        Room currentRoom = caveCreator._currentRoom;
+        Room currentRoom = caveManager._currentRoom;
         Tuple<Vector2, Vector3> vectors = GetDistance();
         Vector2 pos = vectors.Item1 - cameraController.cameraDirection.leftVector;
 
@@ -114,7 +116,7 @@ public class PlayerController : MonoBehaviour {
 
     private void Start() {
         if(targetTile == null) {
-            ChangeTarget(caveCreator._currentRoom, transform.position.x, transform.position.z);
+            ChangeTarget(caveManager._currentRoom, transform.position.x, transform.position.z);
         }
         FixPos();
         AddKeys();

@@ -7,8 +7,8 @@ public class Ghost : MonoBehaviour {
     private float speed;
     private float delay;
     private float minDistance = 0.025f;
-    [SerializeField] private float currentDelay;
-    [SerializeField] private float currentDistance;
+    private float currentDelay;
+    private float currentDistance;
 
     public void SetTarget(Transform target, float speed, float delay) {
         this.target = target;

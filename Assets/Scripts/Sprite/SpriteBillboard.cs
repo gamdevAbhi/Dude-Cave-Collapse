@@ -1,20 +1,28 @@
 using UnityEngine;
 
 public class SpriteBillboard : MonoBehaviour {
-    private Camera _mainCamera;
-    private GameObject shadow;
-    private Vector3 shadowEuler = new Vector3(90f, 0f, 0f);
-
+    [Header("Reference")]
     public GameObject shadowPrefab;
+    [Header("Billboard Properties")]
     public bool isStatic = false;
     public bool isAcute = false;
     public bool hasShadow = false;
+    
+    private GameObject shadow;
+    private Vector3 shadowEuler = new Vector3(90f, 0f, 0f);
+    private Camera _mainCamera;
 
     private void Start() {
         _mainCamera = Camera.main;
+
         if(hasShadow == true) {
             shadow = Instantiate(shadowPrefab, transform.position, Quaternion.identity);
             shadow.transform.eulerAngles = shadowEuler;
+            GameObject prefab = GameObject.Find("Shadows");
+
+            if(prefab == null) prefab = new GameObject("Shadows");
+            
+            shadow.transform.parent = prefab.transform;
         }
     }
 
@@ -25,18 +33,12 @@ public class SpriteBillboard : MonoBehaviour {
         if(isAcute) transform.eulerAngles = new Vector3(45f, transform.eulerAngles.y, 0f);
         else transform.eulerAngles = new Vector3(0f, transform.eulerAngles.y, 0f);
 
-        if(hasShadow == false && shadow != null) {
-            Destroy(shadow);
-            shadow = null;
-        }
-        else if(hasShadow == true && shadow == null) {
-            shadow = Instantiate(shadowPrefab, transform.position, Quaternion.identity);
-            shadow.transform.eulerAngles = shadowEuler;
-        }
-
         if(hasShadow == true) {
             shadow.transform.position = transform.position;
-            shadow.transform.eulerAngles = shadowEuler;
         }
+    }
+
+    private void OnDestroy() {
+        if(shadow != null) Destroy(shadow);    
     }
 }

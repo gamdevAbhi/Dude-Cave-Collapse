@@ -3,17 +3,40 @@ using System.Collections.Generic;
 using UnityEngine;
 
 public class CameraController : MonoBehaviour {
+    [Header("Reference")]
     [SerializeField] private Transform target;
+    [SerializeField] private InputManager inputManager;
+    [Header("Ghost Properties")]
     [SerializeField] private float ghostSpeed;
     [SerializeField] private float ghostDelay;
+    [Header("Camera Properties")]
     [SerializeField] private float cameraRotateSpeed;
-    [SerializeField] private InputManager inputManager;
+    [SerializeField] private float maxXRotation;
+    [SerializeField] private float maxYRotation;
+    [SerializeField] private float cameraFocusPower = 0.1f;
 
     public CameraDirection cameraDirection;
     private Ghost ghost;
+    private Vector2 originalRotation;
     private float targetY;
-    private bool isRight = false;
     private float minRotateY = 0.15f;
+    private bool isRight = false;
+
+    private void FocusCamera() {
+        Vector3 mousePosition = Input.mousePosition;
+        mousePosition -=  GetComponent<Camera>().WorldToScreenPoint(target.transform.position);
+
+        float angleX = cameraFocusPower * mousePosition.y / 100f;
+        float angleY = cameraFocusPower * mousePosition.x / 100f;
+
+        if(angleX > maxXRotation) angleX = maxXRotation;
+        else if(angleX < -maxXRotation) angleX = -maxXRotation; 
+        if(angleY > maxYRotation) angleY = maxYRotation;
+        else if(angleY < -maxYRotation) angleY = -maxYRotation;
+
+        transform.localEulerAngles = new Vector3(originalRotation.x - angleX, 
+        originalRotation.y + angleY, transform.eulerAngles.z);
+    }
 
     private void RotateCamera() {
         if(targetY == 0) return;
@@ -80,6 +103,7 @@ public class CameraController : MonoBehaviour {
     }
 
     private void Awake() {
+        originalRotation = new Vector2(transform.localEulerAngles.x, transform.localEulerAngles.y);
         GameObject obj = new GameObject("Player Follower");
         obj.AddComponent<Ghost>();
         ghost = obj.GetComponent<Ghost>();
@@ -96,6 +120,7 @@ public class CameraController : MonoBehaviour {
 
     private void Update() {
         RotateCamera();
+        FocusCamera();
     }
 
     [System.Serializable]
@@ -104,7 +129,7 @@ public class CameraController : MonoBehaviour {
         public Direction direction;
         public CameraDirection left;
         public CameraDirection right;
-        public Vector2 upVector;
-        public Vector2 leftVector;
+        [HideInInspector] public Vector2 upVector;
+        [HideInInspector] public Vector2 leftVector;
     }
 }

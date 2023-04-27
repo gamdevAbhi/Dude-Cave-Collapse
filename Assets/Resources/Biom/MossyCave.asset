@@ -1,0 +1,48 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: e583b96710f8d0146997ae3c06777bce, type: 3}
+  m_Name: MossyCave
+  m_EditorClassIdentifier: 
+  biomName: Mossy Cave
+  tiles:
+  - refer: {fileID: 11400000, guid: fd02807a2978f044abbd9b04f606a478, type: 2}
+    probablity: 35
+  - refer: {fileID: 11400000, guid: 2b392fddd6689b643808bdc4ce936594, type: 2}
+    probablity: 10
+  - refer: {fileID: 11400000, guid: 8a645d7e93f4bce48a30c9231c4d8c3a, type: 2}
+    probablity: 5
+  - refer: {fileID: 11400000, guid: d5780a22f8b2f4c42a424144d80d64c9, type: 2}
+    probablity: 5
+  - refer: {fileID: 11400000, guid: 07ddd934f2b25b5409ad7f5bdbd5f053, type: 2}
+    probablity: 5
+  - refer: {fileID: 11400000, guid: 12740b2b9eca50c498256f778cde0358, type: 2}
+    probablity: 5
+  - refer: {fileID: 11400000, guid: 30613e28cf7acee48be08e53012c954d, type: 2}
+    probablity: 35
+  tilePer: 100
+  objects:
+  - refer: {fileID: 11400000, guid: 9943b047c8b090748bad76d82cc106c0, type: 2}
+    probablity: 60
+  - refer: {fileID: 11400000, guid: b3cac6e61855ca948a8082109dbf9cc3, type: 2}
+    probablity: 10
+  - refer: {fileID: 11400000, guid: 74c20f8e901ff594d84dc6397edc7858, type: 2}
+    probablity: 10
+  - refer: {fileID: 11400000, guid: 908c858b11e8bef4daea6e093b07aecb, type: 2}
+    probablity: 5
+  - refer: {fileID: 11400000, guid: 744027e818852b3498b2d6ae3ed66f49, type: 2}
+    probablity: 5
+  - refer: {fileID: 11400000, guid: 221c8f24184f19041966a76ac818a72b, type: 2}
+    probablity: 5
+  - refer: {fileID: 11400000, guid: a8491d5505a25094a9ae358f8436a481, type: 2}
+    probablity: 5
+  objectProbablity: 30
+  objectPer: 100

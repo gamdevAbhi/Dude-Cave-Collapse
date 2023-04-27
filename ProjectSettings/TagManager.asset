@@ -14,7 +14,7 @@ TagManager:
   - Tile
   - Water
   - Player
-  - 
+  - Rock
   - 
   - 
   - 
@@ -44,27 +44,6 @@ TagManager:
   - name: Shadow
     uniqueID: 2591933589
     locked: 0
-  - name: Left Leg
-    uniqueID: 981476495
-    locked: 0
-  - name: Body
-    uniqueID: 2504770547
-    locked: 0
-  - name: Head
-    uniqueID: 1677275845
-    locked: 0
-  - name: Face
-    uniqueID: 3159684777
-    locked: 0
-  - name: Hair
-    uniqueID: 4184351031
-    locked: 0
-  - name: Right Leg
-    uniqueID: 582013257
-    locked: 0
-  - name: Left Hand
-    uniqueID: 1727421033
-    locked: 0
-  - name: Right Hand
-    uniqueID: 3364120855
+  - name: 2D
+    uniqueID: 1788888497
     locked: 0
