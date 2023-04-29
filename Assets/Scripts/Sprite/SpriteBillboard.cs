@@ -4,7 +4,6 @@ public class SpriteBillboard : MonoBehaviour {
     [Header("Reference")]
     public GameObject shadowPrefab;
     [Header("Billboard Properties")]
-    public bool isStatic = false;
     public bool isAcute = false;
     public bool hasShadow = false;
     
@@ -27,8 +26,7 @@ public class SpriteBillboard : MonoBehaviour {
     }
 
     public void LateUpdate() {
-        if(isStatic) transform.rotation = _mainCamera.transform.rotation;
-        else transform.LookAt(_mainCamera.transform, Vector3.up);
+        transform.rotation = _mainCamera.transform.rotation;
 
         if(isAcute) transform.eulerAngles = new Vector3(45f, transform.eulerAngles.y, 0f);
         else transform.eulerAngles = new Vector3(0f, transform.eulerAngles.y, 0f);

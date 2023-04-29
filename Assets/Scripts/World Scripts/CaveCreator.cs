@@ -6,13 +6,18 @@ public static class CaveCreator {
     public enum Size {Small, Normal, Large};
 
     public struct Dungeon {
+        public int objectTileProbablity;
+        public int objectWaterProbablity;
         public Size maxRoomSize;
         public Size maxLakeSize;
         public int maxDepth;
         public int roomNo;
 
-        public Dungeon(Size maxRoomSize, Size maxLakeSize, int maxDepth) {
+        public Dungeon(Size maxRoomSize, Size maxLakeSize, int maxDepth, int objectTileProbablity,
+        int objectWaterProbablity) {
             this.maxDepth = maxDepth;
+            this.objectTileProbablity = objectTileProbablity;
+            this.objectWaterProbablity = objectWaterProbablity;
             this.maxLakeSize = maxLakeSize;
             this.maxRoomSize = maxRoomSize;
             this.roomNo = 0;
@@ -51,7 +56,7 @@ public static class CaveCreator {
 
         foreach(Wave neighbour in wave.neighbours) {
             if(neighbour.hexes.Count == 1 && neighbour.hexes[0] == state) 
-                probablity += state.refer.matchChange;
+                probablity += (int)(probablity * state.refer.increaseChance);
         }
 
         return probablity;
@@ -61,11 +66,17 @@ public static class CaveCreator {
         wave.hexes = wave.hexes.OrderBy(x => wave.probablity[x]).ToList();
         wave.hexes.Reverse();
 
-        while(wave.hexes.Count > 1) {
-            if(UnityEngine.Random.Range(0, 100) <= wave.probablity[wave.hexes[0]]) {
-                wave.hexes = new List<Eigenstate> {wave.hexes[0]};
+        int total = 0, current = 0;
+        foreach(int prob in wave.probablity.Values) total += prob;
+        int rand = UnityEngine.Random.Range(0, total + 1);
+
+        for(int i = 0; i < wave.hexes.Count; i++) {
+            current += wave.probablity[wave.hexes[i]];
+
+            if(rand <= current) {
+                wave.hexes = new List<Eigenstate> {wave.hexes[i]};
+                break;
             }
-            else wave.hexes.Remove(wave.hexes[0]);
         }
     }
 
@@ -82,7 +93,6 @@ public static class CaveCreator {
             wave.probablity[wave.hexes[i]] = GetProbablity(wave, wave.hexes[i]);
 
             if(wave.probablity[wave.hexes[i]] <= 0) wave.hexes.Remove(wave.hexes[i]);
-            else if(wave.probablity[wave.hexes[i]] >= 100) wave.hexes = new List<Eigenstate> {wave.hexes[i]};
         }
 
         SetObject(wave);
@@ -90,7 +100,7 @@ public static class CaveCreator {
         if(wave.hexes[0].refer.env == Object.Enviroment.Water) room.currentLakeCount++;
     }
 
-    public static void CreateRoom(Room room, CaveBiom caveBiom) {
+    public static void CreateRoom(Room room, CaveBiom caveBiom, bool withChild) {
         Wave[,] waves = new Wave[room.grid.GetLength(0), room.grid.GetLength(1)];
 
         for(int x = 0; x < room.grid.GetLength(0); x++) {
@@ -128,10 +138,14 @@ public static class CaveCreator {
             }
         }
 
-        foreach(Room child in room.childRoom) CreateRoom(child, caveBiom);
+        if(withChild) foreach(Room child in room.childRoom) CreateRoom(child, caveBiom, true);
         
         foreach(Tile tile in room.gridSave) {
-            if(UnityEngine.Random.Range(0, 100) > caveBiom.objectProbablity) continue;
+            int probablity = (tile.tile.env == Object.Enviroment.Tile)? room.objectTileProbablity : 
+            room.objectWaterProbablity;
+
+            if(UnityEngine.Random.Range(0, 100) > probablity) continue;
+
             Wave wave = new Wave();
 
             foreach(Eigenstate obj in caveBiom.objects) {
@@ -147,7 +161,6 @@ public static class CaveCreator {
                 wave.probablity[wave.hexes[i]] = GetProbablity(wave, wave.hexes[i]);
 
                 if(wave.probablity[wave.hexes[i]] <= 0) wave.hexes.Remove(wave.hexes[i]);
-                else if(wave.probablity[wave.hexes[i]] >= 100) wave.hexes = new List<Eigenstate> {wave.hexes[i]};
             }
 
             SetObject(wave);
@@ -159,7 +172,8 @@ public static class CaveCreator {
     public static Room CreateDungeon(Room parentRoom, Dungeon dungeon, int depth) {
         if(depth >= dungeon.maxDepth) return null;
         Room current = new Room(GetRandomRoomSize(dungeon.maxRoomSize), parentRoom, ref dungeon.roomNo, 
-        (dungeon.maxLakeSize == Size.Small)? 0.2f : (dungeon.maxLakeSize == Size.Normal)? 0.4f : 0.7f);
+        (dungeon.maxLakeSize == Size.Small)? 0.2f : (dungeon.maxLakeSize == Size.Normal)? 0.4f : 0.7f,
+        dungeon.objectTileProbablity, dungeon.objectWaterProbablity);
         int childs = 0;
 
         if(depth < dungeon.maxDepth - 1 && depth > dungeon.maxDepth / 2) childs = UnityEngine.Random.Range(0, 4);
@@ -200,15 +214,20 @@ public class Room {
     public Tile[,] gridSave;
     public Room parentRoom;
     public int maxLakeCount;
-    public int currentLakeCount; 
+    public int objectTileProbablity;
+    public int objectWaterProbablity;
+    public int currentLakeCount;
     public List<Room> childRoom;
     public int childRooms;
 
-    public Room(int[] roomSize, Room parent, ref int roomNo, float lakeSize) {
+    public Room(int[] roomSize, Room parent, ref int roomNo, float lakeSize, 
+    int objectTileProbablity, int objectWaterProbablity) {
         this.grid = new Entity[roomSize[0], roomSize[1]];
         this.gridSave = new Tile[roomSize[0], roomSize[1]];
         this.parentRoom = parent;
         this.currentLakeCount = 0;
+        this.objectTileProbablity = objectTileProbablity;
+        this.objectWaterProbablity = objectWaterProbablity;
         this.maxLakeCount = (int)((this.grid.GetLength(0) - 2) * (this.grid.GetLength(1) - 2) * lakeSize);
         this.childRoom = new List<Room>();
         this.roomNo = roomNo++;

@@ -1,0 +1,18 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 9ecefede0fda27b4fa6cab71b8269d14, type: 3}
+  m_Name: Blue_Tile_05
+  m_EditorClassIdentifier: 
+  objectRef: {fileID: 7469852025175374824, guid: d3ce1d2f1f7306e478e51785e1cc7a2d, type: 3}
+  increaseChance: -1
+  depth: 01000000ffffff7f
+  env: 0

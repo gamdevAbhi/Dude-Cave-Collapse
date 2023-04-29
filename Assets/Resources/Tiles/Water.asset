@@ -13,6 +13,6 @@ MonoBehaviour:
   m_Name: Water
   m_EditorClassIdentifier: 
   objectRef: {fileID: 4943786197296635901, guid: cf2f75d5589eef040ba55b19d7717e2a, type: 3}
-  matchChange: 25
+  increaseChance: 2
   depth: 01000000ffffff7f
   env: 1

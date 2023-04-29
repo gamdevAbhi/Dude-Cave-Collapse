@@ -13,5 +13,6 @@ MonoBehaviour:
   m_Name: Green_Tile_03
   m_EditorClassIdentifier: 
   objectRef: {fileID: 4894024298542854562, guid: 6f7698adb8ed7f5498fe086a0ef03d6d, type: 3}
-  matchChange: -10
+  increaseChance: -0.1
   depth: 01000000ffffff7f
+  env: 0

@@ -4,7 +4,7 @@ using UnityEngine;
 public class Object : ScriptableObject {
     public enum Enviroment {Tile, Water}
     public GameObject objectRef;
-    [Range(-100,100)] public int matchChange;
+    [Range(-5f, 5f)] public float increaseChance;
     public int[] depth = new int[2] {1, int.MaxValue};
     public Enviroment env;
 }

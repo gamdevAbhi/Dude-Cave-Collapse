@@ -97,7 +97,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   shadowPrefab: {fileID: 2848281474643492151, guid: 59f473781588605479a4ff546a4a417a, type: 3}
-  isStatic: 1
   isAcute: 1
   hasShadow: 1
 --- !u!114 &-3509799783855761305
@@ -115,3 +114,4 @@ MonoBehaviour:
   sortingLayerName: 2D
   sortingRenderer:
   - {fileID: 6100976104338558117}
+  isVisible: 0

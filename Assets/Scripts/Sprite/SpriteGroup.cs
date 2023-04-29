@@ -10,7 +10,7 @@ public class SpriteGroup : MonoBehaviour {
     private List<GroupChild> groupChild;
     private Camera _mainCamera;
     private float difference = 200f;
-    private bool isVisible = false;
+    [SerializeField] private bool isVisible = false;
 
     private void Awake() {
         _mainCamera = Camera.main;
@@ -23,6 +23,7 @@ public class SpriteGroup : MonoBehaviour {
 
     private void LateUpdate() {
         if(groupChild != null) IsVisible();
+
         if(isVisible) SortGroup();
     }
 

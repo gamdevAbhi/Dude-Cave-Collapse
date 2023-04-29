@@ -13,5 +13,6 @@ MonoBehaviour:
   m_Name: Rocks_05
   m_EditorClassIdentifier: 
   objectRef: {fileID: 387081668565490290, guid: 2245d06c61d35bc4c81a7a712b4ee7c8, type: 3}
-  matchChange: -12
+  increaseChance: -0.5
   depth: 01000000ffffff7f
+  env: 0
