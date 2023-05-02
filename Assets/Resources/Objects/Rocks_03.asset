@@ -16,3 +16,4 @@ MonoBehaviour:
   increaseChance: -1
   depth: 01000000ffffff7f
   env: 0
+  walkable: 0

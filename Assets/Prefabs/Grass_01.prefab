@@ -12,7 +12,10 @@ GameObject:
   - component: {fileID: 3361661958882921249}
   - component: {fileID: 991040769610107484}
   - component: {fileID: 5806870401632718061}
-  m_Layer: 0
+  - component: {fileID: 4645110872238352766}
+  - component: {fileID: 2440883557338460450}
+  - component: {fileID: 3552472325256893121}
+  m_Layer: 7
   m_Name: Grass_01
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -99,6 +102,7 @@ MonoBehaviour:
   sortingLayerName: 2D
   sortingRenderer:
   - {fileID: 3361661958882921249}
+  alwaysRender: 0
   isVisible: 0
 --- !u!114 &5806870401632718061
 MonoBehaviour:
@@ -115,3 +119,49 @@ MonoBehaviour:
   shadowPrefab: {fileID: 2848281474643492151, guid: 59f473781588605479a4ff546a4a417a, type: 3}
   isAcute: 1
   hasShadow: 1
+--- !u!95 &4645110872238352766
+Animator:
+  serializedVersion: 3
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6730187366365663697}
+  m_Enabled: 1
+  m_Avatar: {fileID: 0}
+  m_Controller: {fileID: 9100000, guid: 174ad4acb010ea24cb616d1fb80b4c01, type: 2}
+  m_CullingMode: 0
+  m_UpdateMode: 0
+  m_ApplyRootMotion: 0
+  m_LinearVelocityBlending: 0
+  m_WarningMessage: 
+  m_HasTransformHierarchy: 1
+  m_AllowConstantClipSamplingOptimization: 1
+  m_KeepAnimatorControllerStateOnDisable: 0
+--- !u!65 &2440883557338460450
+BoxCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6730187366365663697}
+  m_Material: {fileID: 0}
+  m_IsTrigger: 1
+  m_Enabled: 1
+  serializedVersion: 2
+  m_Size: {x: 0.4990245, y: 0.58151895, z: 0.2}
+  m_Center: {x: -0.00580037, y: 0.29075947, z: 0}
+--- !u!114 &3552472325256893121
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6730187366365663697}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ce4ba308a3e2fae4280ad0d47579a3d8, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  animator: {fileID: 4645110872238352766}
+  parameter: _ShouldMove

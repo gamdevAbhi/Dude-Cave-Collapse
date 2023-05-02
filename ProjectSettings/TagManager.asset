@@ -3,17 +3,21 @@
 --- !u!78 &1
 TagManager:
   serializedVersion: 2
-  tags: []
+  tags:
+  - Cave Manager
+  - Water Manager
+  - Setting Manager
+  - Input Manager
   layers:
   - Default
   - TransparentFX
   - Ignore Raycast
-  - 
+  - Detector
   - Water
   - UI
   - Tile
-  - 
-  - Player
+  - Grass
+  - Human
   - Rock
   - 
   - 

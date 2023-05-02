@@ -12,7 +12,7 @@ GameObject:
   - component: {fileID: 6100976104338558117}
   - component: {fileID: 6373605838064112568}
   - component: {fileID: -3509799783855761305}
-  m_Layer: 0
+  m_Layer: 7
   m_Name: Flower
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -114,4 +114,5 @@ MonoBehaviour:
   sortingLayerName: 2D
   sortingRenderer:
   - {fileID: 6100976104338558117}
+  alwaysRender: 0
   isVisible: 0

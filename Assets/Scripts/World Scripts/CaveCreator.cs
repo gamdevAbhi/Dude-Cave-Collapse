@@ -100,6 +100,35 @@ public static class CaveCreator {
         if(wave.hexes[0].refer.env == Object.Enviroment.Water) room.currentLakeCount++;
     }
 
+    private static void CreateGates(Room room, CaveBiom caveBiom) {
+        List<EntityTile> availableTile = new List<EntityTile>();
+
+        for(int x = 0; x < room.gridSave.GetLength(0); x++) {
+            if(x % 2 != 0) continue;
+
+            availableTile.Add(room.gridSave[x, 0]);
+            availableTile.Add(room.gridSave[x, room.gridSave.GetLength(1) - 1]);
+        }
+        for(int z = 1; z < room.gridSave.GetLength(1) - 1; z++) {
+            if(z % 2 != 0) continue;
+
+            availableTile.Add(room.gridSave[0, z]);
+            availableTile.Add(room.gridSave[room.gridSave.GetLength(0) - 1, z]);
+        }
+
+        int child = -1;
+
+        while(child < room.childRoom.Count) {
+            EntityTile tile = availableTile[UnityEngine.Random.Range(0, availableTile.Count)];
+            availableTile.Remove(tile);
+            tile._object = caveBiom.gate;
+            if(child < 0) room.gates.Add(tile, room.parentRoom);
+            else room.gates.Add(tile, room.childRoom[child]);
+
+            child++;
+        }
+    }
+
     public static void CreateRoom(Room room, CaveBiom caveBiom, bool withChild) {
         Wave[,] waves = new Wave[room.grid.GetLength(0), room.grid.GetLength(1)];
 
@@ -133,16 +162,20 @@ public static class CaveCreator {
 
         for(int x = 0; x < room.grid.GetLength(0); x++) {
             for(int z = 0; z < room.grid.GetLength(1); z++) {
-                room.gridSave[x,z] = new Tile();
+                room.gridSave[x,z] = new EntityTile();
                 room.gridSave[x,z].tile = waves[x,z].hexes[0].refer;
             }
         }
 
+        CreateGates(room, caveBiom);
+
         if(withChild) foreach(Room child in room.childRoom) CreateRoom(child, caveBiom, true);
         
-        foreach(Tile tile in room.gridSave) {
-            int probablity = (tile.tile.env == Object.Enviroment.Tile)? room.objectTileProbablity : 
-            room.objectWaterProbablity;
+        foreach(EntityTile tile in room.gridSave) {
+            if(tile._object != null) continue;
+
+            int probablity = (tile.tile.env == Object.Enviroment.Ground)? room.groundObjectProbablity : 
+            room.waterObjectProbablity;
 
             if(UnityEngine.Random.Range(0, 100) > probablity) continue;
 
@@ -210,24 +243,25 @@ public class Wave {
 
 public class Room {
     public int roomNo;
-    public Entity[,] grid;
-    public Tile[,] gridSave;
+    public Tile[,] grid;
+    public EntityTile[,] gridSave;
+    public Dictionary<EntityTile, Room> gates;
     public Room parentRoom;
     public int maxLakeCount;
-    public int objectTileProbablity;
-    public int objectWaterProbablity;
+    public int groundObjectProbablity;
+    public int waterObjectProbablity;
     public int currentLakeCount;
     public List<Room> childRoom;
-    public int childRooms;
 
     public Room(int[] roomSize, Room parent, ref int roomNo, float lakeSize, 
-    int objectTileProbablity, int objectWaterProbablity) {
-        this.grid = new Entity[roomSize[0], roomSize[1]];
-        this.gridSave = new Tile[roomSize[0], roomSize[1]];
+    int groundObjectProbablity, int waterObjectProbablity) {
+        this.grid = new Tile[roomSize[0], roomSize[1]];
+        this.gridSave = new EntityTile[roomSize[0], roomSize[1]];
+        this.gates = new Dictionary<EntityTile, Room>();
         this.parentRoom = parent;
         this.currentLakeCount = 0;
-        this.objectTileProbablity = objectTileProbablity;
-        this.objectWaterProbablity = objectWaterProbablity;
+        this.groundObjectProbablity = groundObjectProbablity;
+        this.waterObjectProbablity = waterObjectProbablity;
         this.maxLakeCount = (int)((this.grid.GetLength(0) - 2) * (this.grid.GetLength(1) - 2) * lakeSize);
         this.childRoom = new List<Room>();
         this.roomNo = roomNo++;
@@ -239,15 +273,13 @@ public class Room {
                 if(grid[x,z]) grid[x,z].gameObject.isStatic = true;
             }
         }
-
-        this.childRooms = childRoom.Count;
     }
 
-    public void Show(Transform parent) {
+    public void Show(Transform parent, CaveBiom biom) {
         for(int x = 0; x < grid.GetLength(0); x++) {
             for(int z = 0; z < grid.GetLength(1); z++) {
                 grid[x,z] = GameObject.Instantiate(gridSave[x,z].tile.objectRef, 
-                new Vector3(x,0,z), Quaternion.identity).GetComponent<Entity>();
+                new Vector3(x,0,z), Quaternion.identity).GetComponent<Tile>();
                 grid[x,z].transform.parent = parent;
                 grid[x,z].tile = gridSave[x,z].tile;
 
@@ -256,17 +288,15 @@ public class Room {
                     new Vector3(x,gridSave[x,z]._object.objectRef.transform.position.y,z), Quaternion.identity);
                     obj.transform.parent = grid[x,z].transform;
                     grid[x,z]._object = gridSave[x,z]._object;
-                }
-            }
-        }
-    }
+                    grid[x,z]._objectRef = obj;
 
-    public void Save() {
-        for(int x = 0; x < grid.GetLength(0); x++) {
-            for(int z = 0; z <grid.GetLength(1); z++) {
-                gridSave[x,z] = new Tile();
-                gridSave[x,z].tile = grid[x,z].tile;
-                gridSave[x,z]._object = grid[x,z]._object;
+                    CaveGate gate = obj.GetComponent<CaveGate>();
+
+                    if(gate != null) {
+                        gate.SetRoom(gates[gridSave[x,z]]);
+                        gate.FixRotation(x, z);
+                    }
+                }
             }
         }
     }
@@ -281,7 +311,7 @@ public class Room {
     }
 }
 
-public class Tile {
+public class EntityTile {
     public Object tile;
     public Object _object;
 }

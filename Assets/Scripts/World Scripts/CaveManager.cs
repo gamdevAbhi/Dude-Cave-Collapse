@@ -4,52 +4,65 @@ using UnityEngine;
 
 public class CaveManager : MonoBehaviour {
     [Header("Reference")]
+    [SerializeField] private GameObject player;
     [SerializeField] private CaveBiom caveBiom;
     [SerializeField] private WaterManager waterManager;
+    [SerializeField] private SettingManager settingManager;
     [Header("Cave Properties")]
-    [SerializeField] [Range(0, 100)] private int objectTileProbablity;
-    [SerializeField] [Range(0, 100)] private int objectWaterProbablity;
+    [SerializeField] [Range(0, 100)] private int groundObjectProbablity;
+    [SerializeField] [Range(0, 100)] private int waterObjectProbablity;
     [SerializeField] private CaveCreator.Size maxRoomSize;
     [SerializeField] private CaveCreator.Size maxLakeSize;
     [SerializeField] private int maxDepth;
-    [Header("Room Properties")]
-    [SerializeField] private Room currentRoom;
-    [SerializeField] private int currentChildRoom;
-    [SerializeField] private int roomNo = 0;
-
+    
+    private Room currentRoom;
+    private List<CaveGate> caveGates;
+    
     public Room _currentRoom {
-        get { return currentRoom;}
+        get {return currentRoom;}
     }
 
-    private void SwitchRoom(Room room) {
-        if(currentRoom != null) currentRoom.Delete();
+    public CaveGate _caveGates {
+        set {
+            if(caveGates == null) caveGates = new List<CaveGate>();
+            caveGates.Add(value);}
+    }
 
+    private CaveGate GetParentGate(Room room) {
+        foreach(CaveGate gate in caveGates) if(gate._room == room) return gate;
+        return null;
+    }
+
+    public void SwitchRoom(Room room) {
+        caveGates = new List<CaveGate>();
+        
+        if(currentRoom != null) {
+            currentRoom.Delete();
+        }
+        Room previousRoom = currentRoom;
         currentRoom = room;
-        currentRoom.Show(transform);
+        currentRoom.Show(transform, caveBiom);
+        CaveGate nextGate = GetParentGate(previousRoom);
+
+        player.transform.position = new Vector3(nextGate.transform.position.x, 
+        player.transform.position.y, nextGate.transform.position.z);
         currentRoom.MakeStatic();
-        currentRoom.Save();
         waterManager.ScaleWater(currentRoom.grid.GetLength(0) - 2, currentRoom.grid.GetLength(1) - 2);
+        settingManager.SetSetting();
     }
 
     private void Awake() {
         CaveCreator.Dungeon dungeon = new CaveCreator.Dungeon(maxRoomSize, maxLakeSize, maxDepth,
-        objectTileProbablity, objectWaterProbablity);
+        groundObjectProbablity, waterObjectProbablity);
         Room parent = CaveCreator.CreateDungeon(null, dungeon, 0);
         CaveCreator.CreateRoom(parent, caveBiom, true);
         SwitchRoom(parent);
     }
 
-    private void Update() {
-        if(Input.GetKeyDown(KeyCode.Return) && currentRoom.parentRoom != null) {
-            SwitchRoom(currentRoom.parentRoom);
-        }
-        else if(Input.GetKeyDown(KeyCode.Keypad0) && currentChildRoom > 0) SwitchRoom(currentRoom.childRoom[0]);
-        else if(Input.GetKeyDown(KeyCode.Keypad1)) SwitchRoom(currentRoom.childRoom[0]);
-        else if(Input.GetKeyDown(KeyCode.Keypad2)) SwitchRoom(currentRoom.childRoom[0]);
-        else if(Input.GetKeyDown(KeyCode.Keypad3)) SwitchRoom(currentRoom.childRoom[0]);
-        else if(Input.GetKeyDown(KeyCode.Escape)) Application.Quit();
-
-        currentChildRoom = currentRoom.childRooms;
-        roomNo = currentRoom.roomNo;
+    public Tile GetTile(float x, float z) {
+        if(x < 0 || x >= currentRoom.grid.GetLength(0)) return null;
+        if(z < 0 || z >= currentRoom.grid.GetLength(1)) return null;
+        
+        return currentRoom.grid[(int)x,(int)z];
     }
 }

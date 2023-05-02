@@ -12,7 +12,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 9ecefede0fda27b4fa6cab71b8269d14, type: 3}
   m_Name: Plants_01
   m_EditorClassIdentifier: 
-  objectRef: {fileID: 2999017137910203060, guid: 8b4cc1c81fb707c46bcaccb47a310445, type: 3}
+  objectRef: {fileID: 1101844586577153245, guid: 23a3855b2183ee94890c8b8f1afd8e1d, type: 3}
   increaseChance: 1
   depth: 01000000ffffff7f
   env: 0
+  walkable: 1

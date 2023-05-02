@@ -1,7 +1,7 @@
 using System;
 using UnityEngine;
 
-public class PlayerController : MonoBehaviour {
+public class PlayerController : MonoBehaviour, IAttacker {
     [Header("Reference")]
     [SerializeField] private Transform handPivot;
     [SerializeField] private CaveManager caveManager;
@@ -12,10 +12,37 @@ public class PlayerController : MonoBehaviour {
     
     private float minDistance = 0.25f;
     private Vector3 normalScale;
-    private Transform targetTile;
+    private Tile targetTile;
+    private Tile facingTile;
+    private ColliderDetector detector;
+
+    public Tile _targetTile {
+        get {return targetTile;}
+    }
+
+    public bool _isMoving {
+        get {
+            if(transform.position != targetTile.transform.position) return true;
+            else return false;
+        }
+    }
+
+    public void Attack() {
+        if(facingTile != null && facingTile._objectRef != null) {
+            IHealth health = facingTile._objectRef.GetComponent<IHealth>();
+            if(health != null) health.TakeDamage(1000);
+        }
+    }
+
+    public void Enter() {
+        if(targetTile == null || targetTile._object == null) return;
+        
+        CaveGate gate = targetTile._objectRef.GetComponent<CaveGate>();
+        gate.VisitDoor();
+    }
 
     private void Move() {
-        Vector3 targetPos = targetTile.position;
+        Vector3 targetPos = targetTile.transform.position;
         targetPos.y = transform.position.y;
 
         transform.position = Vector3.MoveTowards(transform.position, targetPos, speed * Time.deltaTime);
@@ -28,12 +55,12 @@ public class PlayerController : MonoBehaviour {
         if(pos.y < 0) pos.y = 0;
 
         if(currentRoom.grid[(int)pos.x, (int)pos.y].tile.env
-        != Object.Enviroment.Water) {
-            targetTile = currentRoom.grid[(int)pos.x, (int)pos.y].transform;
+        != Object.Enviroment.Water && currentRoom.grid[(int)pos.x, (int)pos.y].UpdateOnwer(this) != null) {
+            targetTile = currentRoom.grid[(int)pos.x, (int)pos.y];
         }
     }
 
-    private void FixPos() { // not need just for testing
+    private void FixPos() {
         Room currentRoom = caveManager._currentRoom;
 
         Vector2 currentPos = new Vector2(Mathf.Round(transform.position.x), Mathf.Round(transform.position.z));
@@ -50,7 +77,7 @@ public class PlayerController : MonoBehaviour {
 
     private Tuple<Vector2, Vector3> GetDistance() {
         Vector2 currentPos = new Vector2(Mathf.Round(transform.position.x), Mathf.Round(transform.position.z));
-        Vector3 distance = targetTile.position;
+        Vector3 distance = targetTile.transform.position;
         distance.y = transform.position.y;
         distance = distance - transform.position;
 
@@ -107,18 +134,36 @@ public class PlayerController : MonoBehaviour {
 
     }
 
+    private void SetFacingTile() {
+        Vector3 screenPos = Camera.main.WorldToScreenPoint(transform.position);
+        Vector3 direction = Input.mousePosition - screenPos;
+        Vector2 pos = new Vector2(transform.position.x, transform.position.z);
+
+        if(Mathf.Abs(direction.x) > Mathf.Abs(direction.y)) {
+            pos += (direction.x > 0)? cameraController.cameraDirection.leftVector 
+            : -cameraController.cameraDirection.leftVector;
+        }
+        else {
+            pos += (direction.y > 0)? cameraController.cameraDirection.upVector
+            : -cameraController.cameraDirection.upVector;
+        }
+
+        facingTile = caveManager.GetTile(pos.x, pos.y);
+    }
+
     private void AddKeys() {
         inputManager.inputs["Up"].onPress += MoveUp;
         inputManager.inputs["Down"].onPress += MoveDown;
         inputManager.inputs["Foward"].onPress += MoveForward;
         inputManager.inputs["Backward"].onPress += MoveBackward;
+        inputManager.inputs["Attack"].onPress += Attack;
+        inputManager.inputs["Enter"].onDown += Enter;
     }
 
     private void Start() {
         if(targetTile == null) {
             ChangeTarget(caveManager._currentRoom, transform.position.x, transform.position.z);
         }
-        FixPos();
         AddKeys();
         normalScale = transform.localScale;
     }
@@ -128,5 +173,10 @@ public class PlayerController : MonoBehaviour {
         Move();
         MoveHand();
         LookDirection();
+        SetFacingTile();
     }
+}
+
+public interface IAttacker {
+    public void Attack();
 }

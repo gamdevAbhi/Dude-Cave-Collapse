@@ -12,6 +12,7 @@ GameObject:
   - component: {fileID: 1679217171661815332}
   - component: {fileID: 6457348322614589983}
   - component: {fileID: 4171582554820078461}
+  - component: {fileID: -2023085189303198648}
   m_Layer: 6
   m_Name: Blue_Tile_05
   m_TagString: Untagged
@@ -60,7 +61,7 @@ MeshRenderer:
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: 2100000, guid: 8c2b66ea0dc5bb244a5c1325ac1b06ea, type: 2}
+  - {fileID: 2100000, guid: 73bf7ff051906f142a7c9ef672c084c3, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
@@ -94,5 +95,20 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 334e18d6f65abe04bb79186a6a26591f, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  render: {fileID: 0}
   tile: {fileID: 0}
   _object: {fileID: 0}
+  _objectRef: {fileID: 0}
+--- !u!114 &-2023085189303198648
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7469852025175374824}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 8df7b5c5fa5d1044684f3a0eb6f8866c, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  mainTex: {fileID: 2800000, guid: 9768a9fb9c7076743859505927a023b7, type: 3}

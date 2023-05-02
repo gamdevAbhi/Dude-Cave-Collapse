@@ -340,6 +340,7 @@ GameObject:
   - component: {fileID: 3785241126592460347}
   - component: {fileID: 5991876797263471165}
   - component: {fileID: 1991097983}
+  - component: {fileID: 5780788812051782719}
   m_Layer: 8
   m_Name: Player
   m_TagString: Untagged
@@ -381,7 +382,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   shadowPrefab: {fileID: 6154249882066370488, guid: fb74351cb1e5bcc4c95b53f95d67de28, type: 3}
-  isStatic: 1
   isAcute: 1
   hasShadow: 1
 --- !u!114 &5991876797263471165
@@ -396,11 +396,12 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: a6962dceaa090ba49b9f348b34e47b5e, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  speed: 3
   handPivot: {fileID: 9212595344080736520}
-  caveCreator: {fileID: 0}
+  caveManager: {fileID: 0}
   inputManager: {fileID: 0}
   cameraController: {fileID: 0}
+  detectorPrefab: {fileID: 3300393251852482068, guid: bf9aa927c327dde45be8f9656fdc9ee8, type: 3}
+  speed: 3
 --- !u!114 &1991097983
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -413,7 +414,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 1072274edc22c464199297b8034c0eec, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  sortingLayerName: 2D
   sortingRenderer:
   - {fileID: 3785241126820910570}
   - {fileID: 3785241126834420319}
@@ -423,7 +423,26 @@ MonoBehaviour:
   - {fileID: 3785241126935558075}
   - {fileID: 3785241126525888479}
   - {fileID: 3785241125006170136}
-  isVisible: 0
+  sortingLayerName: 2D
+--- !u!95 &5780788812051782719
+Animator:
+  serializedVersion: 3
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3785241126592460349}
+  m_Enabled: 1
+  m_Avatar: {fileID: 0}
+  m_Controller: {fileID: 0}
+  m_CullingMode: 0
+  m_UpdateMode: 0
+  m_ApplyRootMotion: 0
+  m_LinearVelocityBlending: 0
+  m_WarningMessage: 
+  m_HasTransformHierarchy: 1
+  m_AllowConstantClipSamplingOptimization: 1
+  m_KeepAnimatorControllerStateOnDisable: 0
 --- !u!1 &3785241126820910575
 GameObject:
   m_ObjectHideFlags: 0

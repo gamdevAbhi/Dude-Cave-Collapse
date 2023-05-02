@@ -11,7 +11,7 @@ GameObject:
   - component: {fileID: 8322508117488795626}
   - component: {fileID: 2351402626051685377}
   - component: {fileID: 7035892598533678843}
-  m_Layer: 0
+  m_Layer: 7
   m_Name: Lily Pad
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -98,4 +98,5 @@ MonoBehaviour:
   sortingLayerName: 2D
   sortingRenderer:
   - {fileID: 2351402626051685377}
+  alwaysRender: 0
   isVisible: 0

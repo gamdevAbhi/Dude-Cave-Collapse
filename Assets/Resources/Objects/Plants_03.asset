@@ -13,6 +13,7 @@ MonoBehaviour:
   m_Name: Plants_03
   m_EditorClassIdentifier: 
   objectRef: {fileID: 8732224921431223952, guid: 7da7b9081381f5a408933a0c29229fe7, type: 3}
-  matchChange: 5
+  increaseChance: 0
   depth: 01000000ffffff7f
   env: 1
+  walkable: 0

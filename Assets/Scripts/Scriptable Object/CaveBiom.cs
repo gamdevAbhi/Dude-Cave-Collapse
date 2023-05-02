@@ -5,6 +5,7 @@ using UnityEditor;
 [CreateAssetMenu(fileName = "CaveBiom", menuName = "CaveBiom", order = 0)]
 public class CaveBiom : ScriptableObject {
     public string biomName;
+    public Object gate;
     public Eigenstate[] tiles;
     public Eigenstate[] objects;
 }
